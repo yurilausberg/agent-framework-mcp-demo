@@ -31,16 +31,15 @@ public class Program
       instructions: "You are a petstore owner",
       name: agentName,
       tools: [
-        new CodeInterpreterToolDefinition(),
         new MCPToolDefinition(
           configuration["MCPToolDefinition:Name"] ?? throw new Exception("Missing MCPToolDefinition:Name in appsettings.json"),
           configuration["MCPToolDefinition:URL"] ?? throw new Exception("Missing MCPToolDefinition:URL in appsettings.json"))
       ]
     );
+    Console.WriteLine($"Successfully created agent with ID: {agentMetadata.Id}");
 
     // Get the created agent
     AIAgent agent = await persistentAgentsClient.GetAIAgentAsync(agentMetadata.Id);
-    Console.WriteLine(agent.DisplayName);
 
     // Create a new thread
     PersistentAgentThread thread = persistentAgentsClient.Threads.CreateThread();
