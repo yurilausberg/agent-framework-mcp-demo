@@ -3,9 +3,9 @@ using Azure.Identity;
 using Microsoft.Agents.AI;
 using Microsoft.Extensions.Configuration;
 
-public class AIProjectExample
+public class Program
 {
-  public async Task RunAsync()
+  public static async Task Main()
   {
     // Build configuration from appsettings.json
     var configuration = new ConfigurationBuilder()
