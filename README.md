@@ -7,7 +7,6 @@ A .NET console application demonstrating the integration of Azure AI Agents with
 - **Azure AI Agent Integration**: Uses Azure AI Projects for creating and managing persistent agents
 - **MCP Tool Support**: Demonstrates integration with Model Context Protocol servers
 - **Interactive Console Interface**: Command-line interface for creating agents and interacting with them
-- **Code Interpreter Tools**: Built-in support for code execution capabilities
 - **Tool Approval Workflow**: Handles tool execution approvals for secure operations
 
 ## Prerequisites
@@ -84,11 +83,9 @@ A .NET console application demonstrating the integration of Azure AI Agents with
 ### Agent Creation
 The application creates a persistent agent with:
 - Custom instructions (configured as "petstore owner" in the demo)
-- Code interpreter capabilities
 - MCP tool integration
 
 ### Tool Integration
-- **Code Interpreter**: Built-in tool for code execution
 - **MCP Tools**: External tools accessed via Model Context Protocol
 - **Tool Approval**: Interactive approval process for tool executions
 
