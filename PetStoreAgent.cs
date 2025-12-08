@@ -76,7 +76,7 @@ public class PetStoreAgent
         // Wait for the run to complete
         while (run.Status == RunStatus.Queued || run.Status == RunStatus.InProgress || run.Status == RunStatus.RequiresAction)
         {
-            Thread.Sleep(TimeSpan.FromMilliseconds(1000));
+            await Task.Delay(TimeSpan.FromMilliseconds(1000));
             run = _persistentAgentsClient.Runs.GetRun(thread.Id, run.Id);
 
             // Handle tool approval if required

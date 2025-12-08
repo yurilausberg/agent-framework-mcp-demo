@@ -200,9 +200,9 @@ To deploy this agent to the Agent 365 platform:
 
 ## Additional Resources
 
-- [Microsoft Agent 365 SDK Documentation](https://learn.microsoft.com/en-us/microsoft-agent-365/developer/)
+- [Microsoft Agent 365 Developer Documentation](https://learn.microsoft.com/en-us/microsoft-agent-365/developer/)
 - [Microsoft 365 Agents SDK](https://learn.microsoft.com/en-us/microsoft-365/agents-sdk/)
+- [Microsoft Agents for .NET](https://github.com/microsoft/Agents-for-net)
 - [Azure AI Projects Documentation](https://docs.microsoft.com/azure/ai-services/openai/)
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
 - [.NET 9.0 Documentation](https://docs.microsoft.com/dotnet/core/)
-- [Agent 365 Samples](https://github.com/microsoft/Agent365-Samples)

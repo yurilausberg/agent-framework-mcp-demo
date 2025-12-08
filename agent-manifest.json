@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/agent-365/v1.0/agent-manifest.schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.17/MicrosoftTeams.schema.json",
   "manifestVersion": "1.0",
   "id": "com.example.petstoreagent",
   "version": "1.0.0",
