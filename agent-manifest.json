@@ -1,0 +1,39 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/agent-365/v1.0/agent-manifest.schema.json",
+  "manifestVersion": "1.0",
+  "id": "com.example.petstoreagent",
+  "version": "1.0.0",
+  "name": {
+    "short": "Pet Store Agent",
+    "full": "Pet Store Assistant with MCP Tools"
+  },
+  "description": {
+    "short": "AI agent for pet store management",
+    "full": "An AI agent that helps with pet store operations using Azure AI and Model Context Protocol tools"
+  },
+  "developer": {
+    "name": "Pet Store Team",
+    "websiteUrl": "https://example.com",
+    "privacyUrl": "https://example.com/privacy",
+    "termsOfUseUrl": "https://example.com/terms"
+  },
+  "agent": {
+    "id": "petstoreagent",
+    "instructions": "You are a petstore owner",
+    "capabilities": [
+      "conversation",
+      "tools"
+    ],
+    "tools": [
+      {
+        "type": "mcp",
+        "name": "PetStoreMCP",
+        "description": "Model Context Protocol tools for pet store operations"
+      }
+    ]
+  },
+  "permissions": [
+    "identity"
+  ],
+  "validDomains": []
+}

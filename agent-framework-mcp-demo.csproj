@@ -12,6 +12,8 @@
     <PackageReference Include="Azure.AI.Projects" Version="1.1.0" />
     <PackageReference Include="Azure.Identity" Version="1.17.1" />
     <PackageReference Include="Microsoft.Agents.AI.AzureAI" Version="1.0.0-preview.251104.1" />
+    <PackageReference Include="Microsoft.Agents.Client" Version="1.3.175" />
+    <PackageReference Include="Microsoft.Agents.Hosting.AspNetCore" Version="1.3.175" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="10.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.0" />
   </ItemGroup>
