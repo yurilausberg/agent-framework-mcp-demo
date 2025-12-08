@@ -153,8 +153,10 @@ public class PetStoreAgent : AgentApplication
             return null;
         }
 
-        string cacheKey = GetAgentCacheKey(turnState);
-        if (_agentCache.TryGetValue(cacheKey, out var cachedAgent))
+        // Use a shared cache key for all users to reuse the same agent configuration
+        string configKey = $"PetStore_{_configuration["FoundryProject:ModelName"]}";
+        
+        if (_agentCache.TryGetValue(configKey, out var cachedAgent))
         {
             return cachedAgent;
         }
@@ -171,6 +173,7 @@ public class PetStoreAgent : AgentApplication
                 return null;
             }
 
+            // Create agent once and share across all conversations
             var agentResponse = await _persistentAgentsClient.Administration.CreateAgentAsync(
                 model: modelName,
                 instructions: AgentInstructions,
@@ -181,9 +184,20 @@ public class PetStoreAgent : AgentApplication
             );
 
             var agent = agentResponse.Value;
-            _agentCache.TryAdd(cacheKey, agent);
-            _logger?.LogInformation($"Created new persistent agent with ID: {agent.Id}");
-            return agent;
+            
+            // Use GetOrAdd to handle race conditions when multiple requests arrive simultaneously
+            var finalAgent = _agentCache.GetOrAdd(configKey, agent);
+            
+            if (finalAgent.Id == agent.Id)
+            {
+                _logger?.LogInformation($"Created new persistent agent with ID: {agent.Id}");
+            }
+            else
+            {
+                _logger?.LogInformation($"Reusing existing agent with ID: {finalAgent.Id}");
+            }
+            
+            return finalAgent;
         }
         catch (Exception ex)
         {
