@@ -1,15 +1,17 @@
 # Agent Framework MCP Demo
 
-A .NET console application demonstrating the integration of Azure AI Agents with Model Context Protocol (MCP) tools, encapsulated using the **Microsoft Agent 365 SDK**. This project showcases how to create persistent AI agents that can leverage external MCP servers for enhanced capabilities and are compatible with Microsoft 365 Agent platform.
+A .NET web application demonstrating the integration of Azure AI Agents with Model Context Protocol (MCP) tools using the **Microsoft Agent 365 Framework**. This project showcases how to create enterprise-ready AI agents that can leverage external MCP servers and are fully integrated with the Agent 365 platform for monitoring, management, and observability.
 
 ## Features
 
-- **Agent 365 SDK Integration**: Encapsulates the agent using Microsoft Agent 365 SDK for enterprise-ready deployment
-- **Azure AI Agent Integration**: Uses Azure AI Projects for creating and managing persistent agents
+- **Agent 365 Framework Integration**: Built on Agent 365 Framework with AgentApplication base class
+- **A365 Dashboard Compatible**: Full observability and telemetry for Agent 365 dashboard monitoring
+- **Azure AI Agent Integration**: Uses Azure AI Projects for creating and managing persistent agents with MCP tools
 - **MCP Tool Support**: Demonstrates integration with Model Context Protocol servers
-- **Interactive Console Interface**: Command-line interface for creating agents and interacting with them
-- **Tool Approval Workflow**: Handles tool execution approvals for secure operations
-- **Enterprise-Ready Architecture**: Structured for compatibility with Microsoft 365 Agent ecosystem
+- **ASP.NET Core Hosting**: Web-based agent with REST API endpoints
+- **Tool Approval Workflow**: Automatic approval of MCP tool executions
+- **OpenTelemetry Integration**: Complete metrics, traces, and observability
+- **Enterprise-Ready Architecture**: Production-ready for Microsoft 365 Agent ecosystem deployment
 
 ## Prerequisites
 
@@ -17,6 +19,7 @@ A .NET console application demonstrating the integration of Azure AI Agents with
 - Azure CLI (for authentication)
 - Azure AI Project with deployed model
 - Access to an MCP server endpoint
+- Agent 365 Dashboard (optional, for production monitoring)
 
 ## Setup
 
@@ -63,19 +66,33 @@ A .NET console application demonstrating the integration of Azure AI Agents with
    ```bash
    dotnet run
    ```
+   
+   The agent will start as a web service on `http://localhost:3978`
 
-2. **Follow the interactive prompts**:
-   - Enter a name for your new agent
-   - Provide a prompt/question for the agent
-   - The agent will process your request using available tools
-   - Review and approve any tool executions when prompted
+2. **Test the agent**:
+   - Use the Agent 365 Playground for interactive testing
+   - Send POST requests to `/api/messages` endpoint
+   - Access via Microsoft Teams (when registered)
+   - Monitor via Agent 365 Dashboard (when deployed)
+
+3. **Sending messages**:
+   ```bash
+   curl -X POST http://localhost:3978/api/messages \
+     -H "Content-Type: application/json" \
+     -d '{"type":"message","text":"Hello, Pet Store Agent!"}'
+   ```
 
 ## Project Structure
 
 ```
-├── Program.cs                 # Main application entry point
-├── PetStoreAgent.cs           # Agent 365 SDK encapsulated agent class
-├── agent-framework-mcp-demo.csproj  # Project file with dependencies
+├── Program.cs                 # ASP.NET Core web application entry point
+├── PetStoreAgent.cs           # AgentApplication implementation with MCP support
+├── AspNetExtensions.cs        # Authentication and token validation extensions
+├── Telemetry/
+│   ├── AgentMetrics.cs        # OpenTelemetry metrics and tracing
+│   ├── A365OtelWrapper.cs     # Agent 365 observability wrapper
+│   └── AgentOTELExtensions.cs # OpenTelemetry configuration
+├── agent-framework-mcp-demo.csproj  # Web SDK project file with A365 packages
 ├── agent-manifest.json        # Agent 365 manifest for deployment
 ├── appsettings.json          # Configuration (not in repo)
 ├── appsettings.sample.json   # Sample configuration template
@@ -84,40 +101,65 @@ A .NET console application demonstrating the integration of Azure AI Agents with
 
 ## Key Components
 
-### Agent 365 SDK Integration
-The application uses the Microsoft Agent 365 SDK to encapsulate agent functionality:
-- **PetStoreAgent**: Encapsulated agent class implementing agent logic
-- **Agent Manifest**: Declarative agent definition for Agent 365 platform
-- **Hosting Infrastructure**: Ready for ASP.NET Core hosting and enterprise deployment
+### Agent 365 Framework Integration
+The application is built on the Microsoft Agent 365 Framework following official patterns:
+- **PetStoreAgent**: Extends `AgentApplication` base class with MCP tool integration
+- **A365 Observability**: Complete OpenTelemetry integration for dashboard monitoring
+- **A365 Tooling Services**: `IMcpToolRegistrationService` for MCP tool management
+- **Authentication**: Token validation for secure agent-to-agent communication
+- **Hosting Infrastructure**: ASP.NET Core web application with `/api/messages` endpoint
 
-### Agent Creation
-The application creates a persistent agent with:
-- Custom instructions (configured as "petstore owner" in the demo)
-- MCP tool integration
-- Agent 365 SDK compatibility
+### Agent Creation and Management
+The application dynamically creates persistent agents with:
+- Custom instructions for pet store assistance
+- MCP tool integration from Azure AI Projects
+- Conversation state management across turns
+- Agent caching for performance optimization
 
 ### Tool Integration
-- **MCP Tools**: External tools accessed via Model Context Protocol
-- **Tool Approval**: Interactive approval process for tool executions
+- **MCP Tools**: Azure AI Projects persistent agents with MCP tool definitions
+- **Tool Approval**: Automatic approval workflow for MCP tool executions
+- **A365 Tooling**: Integration with Agent 365 tooling services
+
+### Observability and Monitoring
+- **OpenTelemetry**: Metrics, traces, and activities for comprehensive monitoring
+- **Agent Metrics**: Custom metrics for message processing, routes, and conversations
+- **A365 Dashboard**: Full integration for production monitoring and management
+- **Baggage Propagation**: Tenant ID and Agent ID tracking across operations
 
 ### Message Handling
-- Creates conversation threads
-- Processes user messages
-- Handles agent responses and tool outputs
-- Displays conversation history with timestamps
-- Interactive loop for multiple queries
+- ASP.NET Core endpoint at `/api/messages`
+- Streaming response support for real-time feedback
+- Conversation thread persistence
+- Multiple authentication handlers (agentic and user)
 
 ## Dependencies
 
+### Agent 365 Framework Packages
 | Package | Version | Purpose |
 |---------|---------|---------|
-| Azure.AI.Projects | 1.1.0 | Azure AI project integration |
+| Microsoft.Agents.A365.Notifications | *-beta.* | Agent 365 notifications support |
+| Microsoft.Agents.A365.Tooling.Extensions.AgentFramework | *-beta.* | **MCP tooling integration** |
+| Microsoft.Agents.A365.Observability.Extensions.AgentFramework | *-beta.* | **A365 dashboard observability** |
+| Microsoft.Agents.AI | 1.0.0-preview.251113.1 | AI agent framework |
+| Microsoft.Agents.Hosting.AspNetCore | 1.3.*-* | ASP.NET Core hosting |
+| Microsoft.Agents.Authentication.Msal | 1.3.*-* | MSAL authentication |
+
+### Azure AI Integration
+| Package | Version | Purpose |
+|---------|---------|---------|
+| Azure.AI.Projects | 1.1.0 | Azure AI Projects (MCP tools) |
 | Azure.Identity | 1.17.1 | Azure authentication |
-| Microsoft.Agents.AI.AzureAI | 1.0.0-preview.251104.1 | AI agent framework |
-| Microsoft.Agents.Client | 1.3.175 | **Agent 365 SDK - Core agent functionality** |
-| Microsoft.Agents.Hosting.AspNetCore | 1.3.175 | **Agent 365 SDK - Hosting infrastructure** |
-| Microsoft.Extensions.Configuration | 10.0.0 | Configuration management |
-| Microsoft.Extensions.Configuration.Json | 10.0.0 | JSON configuration support |
+| Microsoft.Agents.AI.AzureAI | 1.0.0-preview.251104.1 | Azure AI integration |
+
+### Telemetry and Observability
+| Package | Version | Purpose |
+|---------|---------|---------|
+| OpenTelemetry.Exporter.OpenTelemetryProtocol | 1.12.0 | OTLP exporter |
+| OpenTelemetry.Extensions.Hosting | 1.12.0 | Hosting integration |
+| OpenTelemetry.Instrumentation.AspNetCore | 1.12.0 | ASP.NET Core telemetry |
+| OpenTelemetry.Instrumentation.Http | 1.12.0 | HTTP telemetry |
+| OpenTelemetry.Instrumentation.Runtime | 1.12.0 | Runtime metrics |
 
 ## Configuration Options
 

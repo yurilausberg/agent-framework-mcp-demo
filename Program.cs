@@ -1,67 +1,88 @@
-﻿using agent_framework_mcp_demo;
-using Azure.AI.Agents.Persistent;
-using Microsoft.Extensions.Configuration;
+using agent_framework_mcp_demo;
+using agent_framework_mcp_demo.Telemetry;
+using Microsoft.Agents.A365.Observability;
+using Microsoft.Agents.A365.Observability.Extensions.AgentFramework;
+using Microsoft.Agents.A365.Observability.Runtime;
+using Microsoft.Agents.A365.Tooling.Extensions.AgentFramework.Services;
+using Microsoft.Agents.A365.Tooling.Services;
+using Microsoft.Agents.Builder.App;
+using Microsoft.Agents.Core;
+using Microsoft.Agents.Hosting.AspNetCore;
+using Microsoft.Agents.Storage;
+using System.Reflection;
 
-public class Program
+var builder = WebApplication.CreateBuilder(args);
+
+// Setup OpenTelemetry for observability
+builder.ConfigureOpenTelemetry();
+
+builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly());
+builder.Services.AddControllers();
+builder.Services.AddHttpClient("WebClient", client => client.Timeout = TimeSpan.FromSeconds(600));
+builder.Services.AddHttpContextAccessor();
+builder.Logging.AddConsole();
+
+// **********  Configure A365 Services **********
+// Configure observability
+builder.Services.AddAgenticTracingExporter(clusterCategory: "production");
+
+// Add A365 tracing with Agent Framework integration
+builder.AddA365Tracing(config =>
 {
-  public static async Task Main()
-  {
-    Console.WriteLine("=== Pet Store Agent (Agent 365 SDK) ===\n");
+    config.WithAgentFramework();
+});
 
-    // Build configuration from appsettings.json
-    var configuration = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-        .Build();
+// Add A365 Tooling Server integration for MCP tools
+builder.Services.AddSingleton<IMcpToolRegistrationService, McpToolRegistrationService>();
+builder.Services.AddSingleton<IMcpToolServerConfigurationService, McpToolServerConfigurationService>();
+// **********  END Configure A365 Services **********
 
-    // Create and initialize the agent
-    var agent = new PetStoreAgent(configuration);
+// Add AspNet token validation
+builder.Services.AddAgentAspNetAuthentication(builder.Configuration);
 
-    // Prompt user for new agent name
-    Console.WriteLine("Please provide new agent name:");
-    var agentName = Console.ReadLine();
+// Register IStorage - for development, MemoryStorage is suitable
+// For production, use persisted storage (e.g., Azure Blob Storage)
+builder.Services.AddSingleton<IStorage, MemoryStorage>();
 
-    // Initialize the agent
-    await agent.InitializeAsync(agentName ?? "PetStoreAgent");
+// Add AgentApplicationOptions from config
+builder.AddAgentApplicationOptions();
 
-    Console.WriteLine($"\nAgent '{agent.AgentName}' is ready!");
-    Console.WriteLine($"Agent ID: {agent.AgentId}\n");
+// Add the PetStoreAgent (which is transient)
+builder.AddAgent<PetStoreAgent>();
 
-    // Interactive loop for multiple queries
-    while (true)
-    {
-      Console.WriteLine("Enter your prompt (or 'exit' to quit): ");
-      var userMessage = Console.ReadLine();
+var app = builder.Build();
 
-      if (string.IsNullOrEmpty(userMessage) || userMessage.ToLower() == "exit")
-      {
-        break;
-      }
-
-      // Process the message
-      var messages = await agent.ProcessMessageAsync(userMessage);
-
-      // Print the messages in the thread
-      Console.WriteLine("\n--- Conversation ---");
-      foreach (PersistentThreadMessage threadMessage in messages)
-      {
-        Console.Write($"{threadMessage.CreatedAt:yyyy-MM-dd HH:mm:ss} - {threadMessage.Role,10}: ");
-        foreach (MessageContent contentItem in threadMessage.ContentItems)
-        {
-          if (contentItem is MessageTextContent textItem)
-          {
-            Console.Write(textItem.Text);
-          }
-          else if (contentItem is MessageImageFileContent imageFileItem)
-          {
-            Console.Write($"<image from ID: {imageFileItem.FileId}>");
-          }
-          Console.WriteLine();
-        }
-      }
-      Console.WriteLine("--- End Conversation ---\n");
-    }
-
-    Console.WriteLine("Thank you for using Pet Store Agent!");
-  }
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
 }
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Map the /api/messages endpoint to the AgentApplication
+app.MapPost("/api/messages", async (HttpRequest request, HttpResponse response, IAgentHttpAdapter adapter, AgentApplication agent, CancellationToken cancellationToken) =>
+{
+    await AgentMetrics.InvokeObservedHttpOperation("agent.process_message", async () =>
+    {
+        await adapter.ProcessAsync(request, response, agent, cancellationToken);
+    }).ConfigureAwait(false);
+});
+
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Playground")
+{
+    app.MapGet("/", () => "Pet Store Agent - Agent 365 Framework");
+    app.UseDeveloperExceptionPage();
+    app.MapControllers().AllowAnonymous();
+
+    // For local development and testing
+    app.Urls.Add($"http://localhost:3978");
+}
+else
+{
+    app.MapControllers();
+}
+
+app.Run();
+
