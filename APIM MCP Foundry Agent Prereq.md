@@ -34,6 +34,15 @@
 
 ## 5. Sample OpenAPI Endpoint
 
-### Prerequisites:
+### Demo RESTful API:
 
 - https://petstore3.swagger.io/ or BYO
+
+## 6. Resources
+
+- [Microsoft Foundry SDK](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/sdk-overview?view=foundry-classic&pivots=programming-language-csharp)
+- [Microsoft Foundry for Visual Studio Code extension](https://learn.microsoft.com/en-us/azure/ai-foundry/how-to/develop/get-started-projects-vs-code?view=foundry-classic)
+- [MCP servers in Azure API Management](https://learn.microsoft.com/en-us/azure/api-management/mcp-server-overview)
+- [Microsoft Agent Framework](https://learn.microsoft.com/en-us/agent-framework/overview/agent-framework-overview)
+- [Azure AI Foundry Agent](https://learn.microsoft.com/en-us/agent-framework/user-guide/agents/agent-types/azure-ai-foundry-agent?pivots=programming-language-csharp)
+- [MCP Inspector](https://modelcontextprotocol.io/docs/tools/inspector)
