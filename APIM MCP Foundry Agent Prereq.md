@@ -26,7 +26,7 @@
 
 ## 4. Sample Code
 
-- **GitHub Repo**: [agent-framework-mcp-demo](https://github.com/EXP-Projects/agent-framework-mcp-demo)
+- **GitHub Repo**: [agent-framework-mcp-demo](https://github.com/yurilausberg/agent-framework-mcp-demo)
 - Foundry SDK (classic mode)
 - Agent Framework SDK
 - C# .NET 9
