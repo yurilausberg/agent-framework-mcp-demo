@@ -150,6 +150,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Additional Resources
 
-- [Azure AI Projects Documentation](https://docs.microsoft.com/azure/ai-services/openai/)
+- [Microsoft Foundry Projects Documentation](https://docs.microsoft.com/azure/ai-services/openai/)
 - [Model Context Protocol Specification](https://modelcontextprotocol.io/)
 - [.NET 9.0 Documentation](https://docs.microsoft.com/dotnet/core/)
