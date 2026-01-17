@@ -1,10 +1,10 @@
 # Agent Framework MCP Demo
 
-A .NET console application demonstrating the integration of Azure AI Agents with Model Context Protocol (MCP) tools. This project showcases how to create persistent AI agents that can leverage external MCP servers for enhanced capabilities.
+A .NET console application demonstrating the integration of Microsoft Foundry Agents (classic) with Model Context Protocol (MCP) tools. This project showcases how to create persistent AI agents that can leverage external MCP servers for enhanced capabilities.
 
 ## Features
 
-- **Azure AI Agent Integration**: Uses Azure AI Projects for creating and managing persistent agents
+- **Microsoft Foundry Agent Integration**: Uses Microsoft Foundry Projects for creating and managing persistent agents
 - **MCP Tool Support**: Demonstrates integration with Model Context Protocol servers
 - **Interactive Console Interface**: Command-line interface for creating agents and interacting with them
 - **Tool Approval Workflow**: Handles tool execution approvals for secure operations
@@ -13,7 +13,7 @@ A .NET console application demonstrating the integration of Azure AI Agents with
 
 - .NET 9.0 SDK
 - Azure CLI (for authentication)
-- Azure AI Project with deployed model
+- Microsoft Foundry Project (classic) with deployed model
 - Access to an MCP server endpoint
 
 ## Setup
