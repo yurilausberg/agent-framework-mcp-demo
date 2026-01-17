@@ -10,8 +10,8 @@
 
 ### Prerequisites:
 
-- **Foundry Resource**: A shared Azure AI Foundry resource must be created, with a project container for agents, files, and evaluations.
-- **Access Control**: Assign Azure AI User RBAC roles to all pod members needing to create/edit agents. Minimum permissions: `agents/*/read`, `agents/*/action`, `agents/*/delete`.
+- **Foundry Resource**: A shared Microsoft Foundry resource must be created, with a project container for agents, files, and evaluations.
+- **Access Control**: Assign Foundry User RBAC roles to all pod members needing to create/edit agents. Minimum permissions: `agents/*/read`, `agents/*/action`, `agents/*/delete`.
 - **Model Deployments**: Ensure at least one model (e.g., GPT-4.1) is deployed and accessible via the Foundry project endpoint. >= ~500K TPM
 
 ## 3. Local Machine
@@ -27,7 +27,7 @@
 ## 4. Sample Code
 
 - **GitHub Repo**: [agent-framework-mcp-demo](https://github.com/yurilausberg/agent-framework-mcp-demo)
-- Foundry SDK (classic mode)
+- Foundry SDK (classic v1)
 - Agent Framework SDK
 - C# .NET 9
 - Microsoft Foundry for VSCode extension
