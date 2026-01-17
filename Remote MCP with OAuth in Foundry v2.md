@@ -2,7 +2,7 @@
 
 ## Foundry Agent v2 Sample Code
 
-```
+```xml
     <PackageReference Include="Azure.AI.Projects" Version="1.2.0-beta.5" />
     <PackageReference Include="Azure.Identity" Version="1.17.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="10.0.1" />
@@ -10,7 +10,7 @@
 
 ### AppSettings.sample.json
 
-```
+```json
 {
   "FoundryProject": {
     "URL": "<your foundry project url>",
@@ -26,7 +26,7 @@
 
 ### Program.cs
 
-```
+```csharp
 using Azure.AI.Projects;
 using Azure.AI.Projects.OpenAI;
 using Azure.Identity;
