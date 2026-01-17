@@ -1,5 +1,13 @@
 # Workshop Day: Step-by-Step Flow
 
+## Architecture Diagram
+
+We’ll show how to turn an existing REST API into an AI-accessible service using Azure API Management (APIM) and the Model Context Protocol (MCP). We’ll expose the public Petstore API via APIM’s v2 new MCP server feature, then demonstrate two consumption paths: a no-code Microsoft Copilot Studio agent (for “Maker” personas) and a code-based Microsoft Foundry agent (for developers). This approach lets any industry reuse existing APIs in AI solutions with minimal effort – saving development time and costs while leveraging Azure services. 
+
+In short, this demo delivers a clear message: “Leverage what you already have, and let AI do more with it – securely, quickly, and at low cost, across any vertical.” 
+
+![Diagram](architecture-diagram-apim-mcp-agent.png)
+
 ## Step 1: Kickoff & Orientation
 
 - Welcome participants, review objectives, and introduce the Foundry Agent, MCP, and APIM concepts.
